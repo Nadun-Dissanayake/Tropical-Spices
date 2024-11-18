@@ -1,5 +1,6 @@
 import { useLocation ,Outlet } from "react-router-dom";
 import Navbar from "../Component/navbar.jsx";
+import Footer from "../Component/footer.jsx";
 
 const RootLayout = () => {
 
@@ -21,7 +22,7 @@ const RootLayout = () => {
 
             {/* Footer */}
             <footer>
-                {/* Your footer content goes here */}
+                <Footer />
             </footer>
         </div>
     );

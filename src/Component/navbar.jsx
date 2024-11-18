@@ -13,14 +13,15 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import image1 from '../Assets/Logo.png'; 
+import { useNavigate } from 'react-router-dom';
 
-const pages = ['Products', 'Pricing', 'About Us'];
-
+const pages = ['Home', 'Products', 'Contact Us'];
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(!!localStorage.getItem('token'));
+  const navigate = useNavigate();  // Initialize the useNavigate hook
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -29,78 +30,83 @@ function ResponsiveAppBar() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (page) => {
     setAnchorElNav(null);
+    if (page === 'Home') {
+      navigate('/');  // Navigate to /home when Home button is clicked
+    }  else if (page === 'Products') {
+      navigate('/products');
+    } else if (page === 'Contact Us') {
+      navigate('/contact');
+    }
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    window.location.reload(); // Reload to update the Navbar
-    window.location.href = '/signIn';
-  };
-
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#365E32', height: '10vh', display: 'flex', justifyContent: 'center' }}>
+    <AppBar position="static" sx={{ backgroundColor:"black", height:"100px", display:"flex", alignItems:'center', justifyContent:'center' }}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Box
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              width: "100px",
-              height: "100px",
-              marginRight:"100px"
-            }}
-          >
-            <Avatar src={image1} sx={{ width: "100px", height: "100px" }}></Avatar>
+        <Toolbar disableGutters >
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{ display: { xs: 'block', md: 'none' } }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
+                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
           </Box>
-
-          
-          
-          
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            <Avatar src={image1} sx={{ width: "50px", height: "50px" }}></Avatar>
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Avatar src={image1} sx={{width:"120px", height:"100px", borderRadius:"0px"}}></Avatar>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', marginLeft:"30px" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block', marginRight:"50px" }}
+                onClick={() => handleCloseNavMenu(page)}
+                sx={{ my: 2, color: 'white', display: 'block', marginLeft:"20px" }}
               >
                 {page}
               </Button>
             ))}
           </Box>
-
-          {isLoggedIn ? <Button onClick={handleLogout}>Logout</Button>:<Button href="/signIn">Login</Button>}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, flexDirection:"row", gap:"10px", }}>
+          <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#FFA823"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
+          <Box >
+            <Typography sx={{ flexGrow: 0, color:"white", fontSize:"15px" }}>Put Email your requirements</Typography>
+            <Typography sx={{ flexGrow: 0, color:"white", fontSize:"15px" }}>globaltropicalspice@gmail.com</Typography>
+          </Box>
+          </Box>
+          <Button href='/Contact' sx={{color:"white", display:{xs:"none" ,sm:"none" ,md:"none", lg:"flex"}, marginLeft:"40px", backgroundColor:"white", color:"black", fontWeight:"bold", padding:"10px 20px", '&:hover':{backgroundColor:"#FFA823", color:"white"}}}>Contact Us</Button>
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;
